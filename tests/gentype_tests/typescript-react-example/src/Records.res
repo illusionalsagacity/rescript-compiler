@@ -132,6 +132,9 @@ type myRecBsAs = {
   theKey: string,
   @as("with\"dquote")
   withDQuote: string,
+  /* parser bug:
+  \"with\"dquote2": string,
+  // */
   @as("with'squote")
   withSQuote: string,
   @as("1number")
