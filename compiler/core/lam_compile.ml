@@ -1529,7 +1529,12 @@ let compile output_prefix =
           ( EffectCall (Maybe_tail_is_return (Tail_with_name {label = Some ret}))
           | NeedValue (Maybe_tail_is_return (Tail_with_name {label = Some ret}))
             ) )
-        when Ident.same ret.id fn_id ->
+        when Ident.same ret.id fn_id
+             && (ret.params = [] || Ext_list.same_length ret.params args) ->
+        (* A cast such as [Obj.magic] can make the argument count differ from
+           the parameter count; such a call is compiled as an ordinary call.
+           A function that takes a unit has no JS parameters, so a call to it
+           loops whatever it passes. *)
         ret.triggered <- true;
         (* Here we mark [finished] true, since the continuation
             does not make sense any more (due to that we have [continue])
@@ -1544,9 +1549,18 @@ let compile output_prefix =
                 http://caml.inria.fr/pub/ml-archives/caml-list/2005/02/fe9bc4e23e6dc8c932c8ab34240ff195.en.html
 
             *)
+        (* No parameter holds the argument of a unit function, but its side
+           effects still run. *)
+        let effects, args =
+          if ret.params = [] then
+            ( Ext_list.filter_map args (fun arg ->
+                  if Js_analyzer.no_side_effect_expression arg then None
+                  else Some (S.exp arg)),
+              [] )
+          else ([], args)
+        in
         (* TODO: use [fold]*)
         let _, assigned_params, new_params =
-          let args = if ret.params = [] then [] else args in
           Ext_list.fold_left2 ret.params args (0, [], Map_ident.empty)
             (fun param arg (i, assigns, new_params) ->
               match arg with
@@ -1566,12 +1580,15 @@ let compile output_prefix =
         ret.new_params <-
           Map_ident.disjoint_merge_exn new_params ret.new_params (fun _ _ _ ->
               assert false);
+        (* [assigned_params] was accumulated in reverse; assign in argument
+           order so the arguments are evaluated left to right. *)
         let block =
-          Ext_list.map_append assigned_params [S.continue_] (fun (param, arg) ->
-              S.assign param arg)
+          Ext_list.rev_map_append assigned_params [S.continue_]
+            (fun (param, arg) -> S.assign param arg)
         in
         (* Note true and continue needed to be handled together*)
-        Js_output.make ~output_finished:True (Ext_list.append args_code block)
+        Js_output.make ~output_finished:True
+          (List.concat [args_code; effects; block])
       | _ ->
         Js_output.output_of_block_and_expression lambda_cxt.continuation
           args_code

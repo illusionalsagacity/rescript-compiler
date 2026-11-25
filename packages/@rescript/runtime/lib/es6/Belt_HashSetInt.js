@@ -50,8 +50,8 @@ function remove(h, key) {
       if (cell_next === undefined) {
         return;
       }
-      _cell = cell_next;
       _prec = cell;
+      _cell = cell_next;
       continue;
     };
   } else {

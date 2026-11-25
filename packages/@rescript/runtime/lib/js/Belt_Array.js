@@ -564,8 +564,8 @@ function joinWith(a, sep, toString) {
     if (i === lastIndex) {
       return res + toString(a[i]);
     }
-    _res = res + (toString(a[i]) + sep);
     _i = i + 1 | 0;
+    _res = res + (toString(a[i]) + sep);
     continue;
   };
 }

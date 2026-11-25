@@ -109,8 +109,8 @@ function remove(h, key) {
           h.size = h.size - 1 | 0;
           return;
         }
-        _buckets = cell_next;
         _prec = buckets;
+        _buckets = cell_next;
         continue;
       };
     }

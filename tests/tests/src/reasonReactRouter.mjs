@@ -36,11 +36,11 @@ function path() {
         if (i < 0) {
           return res;
         }
+        _i = i - 1 | 0;
         _res = {
           hd: a[i],
           tl: res
         };
-        _i = i - 1 | 0;
         continue;
       };
   }
@@ -114,8 +114,8 @@ function urlNotEqual(a, b) {
       if (aList.hd !== bList.hd) {
         return true;
       }
-      _bList = bList.tl;
       _aList = aList.tl;
+      _bList = bList.tl;
       continue;
     };
   }

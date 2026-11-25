@@ -131,8 +131,8 @@ function removeMany(t, keys) {
       if (u === undefined) {
         return u;
       }
-      _i = i + 1 | 0;
       _t = u;
+      _i = i + 1 | 0;
       continue;
     };
   }

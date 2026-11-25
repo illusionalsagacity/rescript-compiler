@@ -131,8 +131,8 @@ function copy(q) {
       } else {
         qRes.first = res;
       }
-      _cell = cell.next;
       _prev = res;
+      _cell = cell.next;
       continue;
     }
     qRes.last = prev;
@@ -162,8 +162,8 @@ function map(q, f) {
       } else {
         qRes.first = res;
       }
-      _cell = cell.next;
       _prev = res;
+      _cell = cell.next;
       continue;
     }
     qRes.last = prev;
@@ -202,8 +202,8 @@ function reduce(q, accu, f) {
       return accu$1;
     }
     let accu$2 = f(accu$1, cell.content);
-    _cell = cell.next;
     _accu = accu$2;
+    _cell = cell.next;
     continue;
   };
 }
@@ -234,8 +234,8 @@ function fillAux(_i, arr, _cell) {
       return;
     }
     arr[i] = cell.content;
-    _cell = cell.next;
     _i = i + 1 | 0;
+    _cell = cell.next;
     continue;
   };
 }

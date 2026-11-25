@@ -13,8 +13,8 @@ function sortedLengthAuxMore(xs, _prec, _acc, len, lt) {
     if (!lt(v, prec)) {
       return acc;
     }
-    _acc = acc + 1 | 0;
     _prec = v;
+    _acc = acc + 1 | 0;
     continue;
   };
 }
@@ -39,8 +39,8 @@ function strictlySortedLength(xs, lt) {
       if (!lt(prec, v)) {
         return acc;
       }
-      _acc = acc + 1 | 0;
       _prec = v;
+      _acc = acc + 1 | 0;
       continue;
     };
   } else if (lt(x1, x0)) {
@@ -91,9 +91,9 @@ function merge(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, cmp) 
       if (i1$1 >= src1r) {
         return Belt_Array.blitUnsafe(src2, i2, dst, d + 1 | 0, src2r - i2 | 0);
       }
-      _d = d + 1 | 0;
-      _s1 = src[i1$1];
       _i1 = i1$1;
+      _s1 = src[i1$1];
+      _d = d + 1 | 0;
       continue;
     }
     dst[d] = s2;
@@ -101,9 +101,9 @@ function merge(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, cmp) 
     if (i2$1 >= src2r) {
       return Belt_Array.blitUnsafe(src, i1, dst, d + 1 | 0, src1r - i1 | 0);
     }
-    _d = d + 1 | 0;
-    _s2 = src2[i2$1];
     _i2 = i2$1;
+    _s2 = src2[i2$1];
+    _d = d + 1 | 0;
     continue;
   };
 }
@@ -128,9 +128,9 @@ function union(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, cmp) 
       let i1$1 = i1 + 1 | 0;
       let d$1 = d + 1 | 0;
       if (i1$1 < src1r) {
-        _d = d$1;
-        _s1 = src[i1$1];
         _i1 = i1$1;
+        _s1 = src[i1$1];
+        _d = d$1;
         continue;
       }
       Belt_Array.blitUnsafe(src2, i2, dst, d$1, src2r - i2 | 0);
@@ -150,20 +150,20 @@ function union(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, cmp) 
           return (d$2 + src1r | 0) - i1$2 | 0;
         }
       }
-      _d = d$2;
-      _s2 = src2[i2$1];
-      _i2 = i2$1;
-      _s1 = src[i1$2];
       _i1 = i1$2;
+      _s1 = src[i1$2];
+      _i2 = i2$1;
+      _s2 = src2[i2$1];
+      _d = d$2;
       continue;
     }
     dst[d] = s2;
     let i2$2 = i2 + 1 | 0;
     let d$3 = d + 1 | 0;
     if (i2$2 < src2r) {
-      _d = d$3;
-      _s2 = src2[i2$2];
       _i2 = i2$2;
+      _s2 = src2[i2$2];
+      _d = d$3;
       continue;
     }
     Belt_Array.blitUnsafe(src, i1, dst, d$3, src1r - i1 | 0);
@@ -191,8 +191,8 @@ function intersect(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, c
       if (i1$1 >= src1r) {
         return d;
       }
-      _s1 = src[i1$1];
       _i1 = i1$1;
+      _s1 = src[i1$1];
       continue;
     }
     if (c === 0) {
@@ -203,19 +203,19 @@ function intersect(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, c
       if (!(i1$2 < src1r && i2$1 < src2r)) {
         return d$1;
       }
-      _d = d$1;
-      _s2 = src2[i2$1];
-      _i2 = i2$1;
-      _s1 = src[i1$2];
       _i1 = i1$2;
+      _s1 = src[i1$2];
+      _i2 = i2$1;
+      _s2 = src2[i2$1];
+      _d = d$1;
       continue;
     }
     let i2$2 = i2 + 1 | 0;
     if (i2$2 >= src2r) {
       return d;
     }
-    _s2 = src2[i2$2];
     _i2 = i2$2;
+    _s2 = src2[i2$2];
     continue;
   };
 }
@@ -242,9 +242,9 @@ function diff(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, cmp) {
       if (i1$1 >= src1r) {
         return d$1;
       }
-      _d = d$1;
-      _s1 = src[i1$1];
       _i1 = i1$1;
+      _s1 = src[i1$1];
+      _d = d$1;
       continue;
     }
     if (c === 0) {
@@ -258,16 +258,16 @@ function diff(src, src1ofs, src1len, src2, src2ofs, src2len, dst, dstofs, cmp) {
           return (d + src1r | 0) - i1$2 | 0;
         }
       }
-      _s2 = src2[i2$1];
-      _i2 = i2$1;
-      _s1 = src[i1$2];
       _i1 = i1$2;
+      _s1 = src[i1$2];
+      _i2 = i2$1;
+      _s2 = src2[i2$1];
       continue;
     }
     let i2$2 = i2 + 1 | 0;
     if (i2$2 < src2r) {
-      _s2 = src2[i2$2];
       _i2 = i2$2;
+      _s2 = src2[i2$2];
       continue;
     }
     Belt_Array.blitUnsafe(src, i1, dst, d, src1r - i1 | 0);

@@ -151,11 +151,11 @@ function stackAllLeft(_v, _s) {
     if (v === undefined) {
       return s;
     }
+    _v = v.l;
     _s = {
       hd: v,
       tl: s
     };
-    _v = v.l;
     continue;
   };
 }
@@ -180,8 +180,9 @@ function reduce(_s, _accu, f) {
     if (s === undefined) {
       return accu;
     }
-    _accu = f(reduce(s.l, accu, f), s.v);
+    let accu$1 = f(reduce(s.l, accu, f), s.v);
     _s = s.r;
+    _accu = accu$1;
     continue;
   };
 }
@@ -319,11 +320,11 @@ function toListAux(_n, _accu) {
     if (n === undefined) {
       return accu;
     }
+    _n = n.l;
     _accu = {
       hd: n.v,
       tl: toListAux(n.r, accu)
     };
-    _n = n.l;
     continue;
   };
 }
@@ -350,7 +351,7 @@ function checkInvariantInternal(_v) {
         RE_EXN_ID: "Assert_failure",
         _1: [
           "Belt_internalAVLset.res",
-          292,
+          295,
           4
         ],
         Error: new Error()
@@ -375,8 +376,8 @@ function fillArray(_n, _i, arr) {
     if (r === undefined) {
       return rnext;
     }
-    _i = rnext;
     _n = r;
+    _i = rnext;
     continue;
   };
 }
@@ -419,8 +420,8 @@ function fillArrayWithFilter(_n, _i, arr, p) {
     if (r === undefined) {
       return rnext;
     }
-    _i = rnext;
     _n = r;
+    _i = rnext;
     continue;
   };
 }
@@ -597,8 +598,8 @@ function cmp(s1, s2, cmp$1) {
       if (c !== 0) {
         return c;
       }
-      _e2 = stackAllLeft(h2.r, e2.tl);
       _e1 = stackAllLeft(h1.r, e1.tl);
+      _e2 = stackAllLeft(h2.r, e2.tl);
       continue;
     };
   } else if (len1 < len2) {
@@ -633,8 +634,8 @@ function subset(_s1, _s2, cmp) {
       if (!subset(l1, l2, cmp)) {
         return false;
       }
-      _s2 = r2;
       _s1 = r1;
+      _s2 = r2;
       continue;
     }
     if (c < 0) {

@@ -83,11 +83,11 @@ function dfs1(_nodes, graph, _visited) {
       continue;
     }
     console.log(x);
+    _nodes = Pervasives.$at(nexts(x, graph), xs);
     _visited = {
       hd: x,
       tl: visited
     };
-    _nodes = Pervasives.$at(nexts(x, graph), xs);
     continue;
   };
 }
@@ -180,11 +180,11 @@ function dfs2(nodes, graph, visited) {
         _nodes = xs;
         continue;
       }
+      _nodes = xs;
       _visited = aux(nexts(x, graph), graph, {
         hd: x,
         tl: visited
       });
-      _nodes = xs;
       continue;
     };
   };

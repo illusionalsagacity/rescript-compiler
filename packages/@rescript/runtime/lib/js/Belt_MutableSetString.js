@@ -63,8 +63,8 @@ function removeMany0(_t, xs, _i, len) {
     if (u === undefined) {
       return;
     }
-    _i = i + 1 | 0;
     _t = u;
+    _i = i + 1 | 0;
     continue;
   };
 }

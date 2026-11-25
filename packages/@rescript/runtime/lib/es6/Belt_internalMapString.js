@@ -226,8 +226,8 @@ function compareAux(_e1, _e2, vcmp) {
     if (cx !== 0) {
       return cx;
     }
-    _e2 = Belt_internalAVLtree.stackAllLeft(h2.r, e2.tl);
     _e1 = Belt_internalAVLtree.stackAllLeft(h1.r, e1.tl);
+    _e2 = Belt_internalAVLtree.stackAllLeft(h2.r, e2.tl);
     continue;
   };
 }
@@ -259,8 +259,8 @@ function eqAux(_e1, _e2, eq) {
     if (!(h1.k === h2.k && eq(h1.v, h2.v))) {
       return false;
     }
-    _e2 = Belt_internalAVLtree.stackAllLeft(h2.r, e2.tl);
     _e1 = Belt_internalAVLtree.stackAllLeft(h1.r, e1.tl);
+    _e2 = Belt_internalAVLtree.stackAllLeft(h2.r, e2.tl);
     continue;
   };
 }

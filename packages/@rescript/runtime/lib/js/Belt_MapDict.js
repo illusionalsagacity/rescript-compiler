@@ -249,8 +249,8 @@ function removeMany(t, keys, cmp) {
       if (u === undefined) {
         return u;
       }
-      _i = i + 1 | 0;
       _t = u;
+      _i = i + 1 | 0;
       continue;
     };
   }

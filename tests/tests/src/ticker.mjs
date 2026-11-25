@@ -35,8 +35,8 @@ function split(delim, s) {
           hd: "",
           tl: l$1
         }) : l$1;
-      _x = i$p;
       _l = l$2;
+      _x = i$p;
       continue;
     };
   } else {
@@ -139,12 +139,12 @@ function compute_update_sequences(all_tickers) {
           hd: ticker,
           tl: up
         }, map, match.lhs);
-        _ticker = match.rhs;
-        _map = map$1;
         _up = {
           hd: ticker,
           tl: up
         };
+        _map = map$1;
+        _ticker = match.rhs;
         continue;
       };
     };
@@ -309,8 +309,8 @@ function loop(_lines, _param) {
     if (lines === 0) {
       return print_all_composite(all_tickers);
     }
-    _param = process_input_line(param[1], all_tickers, lines.hd);
     _lines = lines.tl;
+    _param = process_input_line(param[1], all_tickers, lines.hd);
     continue;
   };
 }

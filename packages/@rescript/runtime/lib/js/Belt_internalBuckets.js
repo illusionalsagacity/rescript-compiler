@@ -17,8 +17,8 @@ function copyAuxCont(_c, _prec) {
       next: undefined
     };
     prec.next = ncopy;
-    _prec = ncopy;
     _c = c.next;
+    _prec = ncopy;
     continue;
   };
 }
@@ -61,8 +61,8 @@ function bucketLength(_accu, _buckets) {
     if (buckets === undefined) {
       return accu;
     }
-    _buckets = buckets.next;
     _accu = accu + 1 | 0;
+    _buckets = buckets.next;
     continue;
   };
 }
@@ -93,8 +93,9 @@ function do_bucket_fold(f, _b, _accu) {
     if (b === undefined) {
       return accu;
     }
-    _accu = f(accu, b.key, b.value);
+    let accu$1 = f(accu, b.key, b.value);
     _b = b.next;
+    _accu = accu$1;
     continue;
   };
 }
@@ -151,8 +152,8 @@ function filterMapInplaceBucket(f, h, i, _prec, _cell) {
         cell.next = n;
         return;
       }
-      _cell = n;
       _prec = cell;
+      _cell = n;
       continue;
     }
     h.size = h.size - 1 | 0;
@@ -191,8 +192,8 @@ function fillArray(_i, arr, _cell) {
     if (v === undefined) {
       return i + 1 | 0;
     }
-    _cell = v;
     _i = i + 1 | 0;
+    _cell = v;
     continue;
   };
 }
@@ -206,8 +207,8 @@ function fillArrayMap(_i, arr, _cell, f) {
     if (v === undefined) {
       return i + 1 | 0;
     }
-    _cell = v;
     _i = i + 1 | 0;
+    _cell = v;
     continue;
   };
 }

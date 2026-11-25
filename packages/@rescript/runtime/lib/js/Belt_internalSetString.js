@@ -39,8 +39,8 @@ function compareAux(_e1, _e2) {
         return 1;
       }
     }
-    _e2 = Belt_internalAVLset.stackAllLeft(h2.r, e2.tl);
     _e1 = Belt_internalAVLset.stackAllLeft(h1.r, e1.tl);
+    _e2 = Belt_internalAVLset.stackAllLeft(h2.r, e2.tl);
     continue;
   };
 }
@@ -81,8 +81,8 @@ function subset(_s1, _s2) {
       if (!subset(l1, l2)) {
         return false;
       }
-      _s2 = r2;
       _s1 = r1;
+      _s2 = r2;
       continue;
     }
     if (v1 < v2) {

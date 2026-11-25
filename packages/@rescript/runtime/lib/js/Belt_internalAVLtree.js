@@ -228,11 +228,11 @@ function stackAllLeft(_v, _s) {
     if (v === undefined) {
       return s;
     }
+    _v = v.l;
     _s = {
       hd: v,
       tl: s
     };
-    _v = v.l;
     continue;
   };
 }
@@ -317,8 +317,8 @@ function reduce(_m, _accu, f) {
     let d = m.v;
     let l = m.l;
     let r = m.r;
-    _accu = f(reduce(l, accu, f), v, d);
     _m = r;
+    _accu = f(reduce(l, accu, f), v, d);
     continue;
   };
 }
@@ -512,6 +512,7 @@ function toListAux(_n, _accu) {
     let v = n.v;
     let l = n.l;
     let r = n.r;
+    _n = l;
     _accu = {
       hd: [
         k,
@@ -519,7 +520,6 @@ function toListAux(_n, _accu) {
       ],
       tl: toListAux(r, accu)
     };
-    _n = l;
     continue;
   };
 }
@@ -567,8 +567,8 @@ function fillArrayKey(_n, _i, arr) {
     if (r === undefined) {
       return rnext;
     }
-    _i = rnext;
     _n = r;
+    _i = rnext;
     continue;
   };
 }
@@ -585,8 +585,8 @@ function fillArrayValue(_n, _i, arr) {
     if (r === undefined) {
       return rnext;
     }
-    _i = rnext;
     _n = r;
+    _i = rnext;
     continue;
   };
 }
@@ -607,8 +607,8 @@ function fillArray(_n, _i, arr) {
     if (r === undefined) {
       return rnext;
     }
-    _i = rnext;
     _n = r;
+    _i = rnext;
     continue;
   };
 }
@@ -756,8 +756,8 @@ function cmp(s1, s2, kcmp, vcmp) {
       if (cx !== 0) {
         return cx;
       }
-      _e2 = stackAllLeft(h2.r, e2.tl);
       _e1 = stackAllLeft(h1.r, e1.tl);
+      _e2 = stackAllLeft(h2.r, e2.tl);
       continue;
     };
   } else if (len1 < len2) {
@@ -787,8 +787,8 @@ function eq(s1, s2, kcmp, veq) {
       if (!(kcmp(h1.k, h2.k) === 0 && veq(h1.v, h2.v))) {
         return false;
       }
-      _e2 = stackAllLeft(h2.r, e2.tl);
       _e1 = stackAllLeft(h1.r, e1.tl);
+      _e2 = stackAllLeft(h2.r, e2.tl);
       continue;
     };
   } else {

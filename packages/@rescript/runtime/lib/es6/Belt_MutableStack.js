@@ -71,8 +71,8 @@ function size(s) {
       if (x$2 === undefined) {
         return acc + 1 | 0;
       }
-      _acc = acc + 1 | 0;
       _x = x$2;
+      _acc = acc + 1 | 0;
       continue;
     };
   } else {

@@ -15,8 +15,8 @@ function app(_f, _args) {
     if (d >= 0) {
       return x => app(f, args.concat([x]));
     }
-    _args = args.slice(arity, len);
     _f = f.apply(null, args.slice(0, arity));
+    _args = args.slice(arity, len);
     continue;
   };
 }
