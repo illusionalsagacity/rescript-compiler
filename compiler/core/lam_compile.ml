@@ -231,6 +231,25 @@ type initialization = J.block
       non-toplevel, it will explode code very quickly
 *)
 
+(* Whether [lam] contains an assignment to [id]. Only a ref that no function
+   captures becomes an assigned variable, so code that [lam] calls cannot
+   assign [id]. *)
+let rec assigns id (lam : Lam.t) =
+  (match lam with
+  | Lassign (assigned, _) -> Ident.same assigned id
+  | _ -> false)
+  || Lam_iter.inner_exists lam (assigns id)
+
+(* Whether evaluating [lam] may change the value of [e] or the effects of
+   evaluating it. Anything but a number or a local variable is assumed to
+   change: calls have effects, and JS globals, fields and array elements may be
+   written. *)
+let may_change ~during:lam (e : J.expression) =
+  match e.expression_desc with
+  | Number _ -> false
+  | Var (Id id) -> Ext_ident.is_js id || assigns id lam
+  | _ -> true
+
 let compile output_prefix =
   let rec compile_external_field (* Like [List.empty]*)
       ?(dynamic_import = false) (lamba_cxt : Lam_compile_context.t)
@@ -1170,17 +1189,11 @@ let compile output_prefix =
       in
       Js_output.output_of_block_and_expression lambda_cxt.continuation block
         E.unit
-  (* all non-tail
-      TODO: check semantics should start, finish be executed each time in both
-       ocaml and js?, also check evaluation order..
-       in ocaml id is not in the scope of finish, so it should be safe here
-
-       for i  = 0 to (print_int 3; 10) do print_int i done;;
-       3012345678910- : unit = ()
-
-      for(var i =  0 ; i < (console.log(i),10); ++i){console.log('hi')}
-      print i each time, so they are different semantics...
-  *)
+  (* Neither start nor finish is in tail position, and [id] is not in scope in
+     either. Start is evaluated before finish, and each only once:
+     [for i in 0 to {Console.log("x"); 10}] must not print on each iteration. A
+     JS loop test runs on each iteration, so [Js_dump] binds the end in the loop
+     header unless it is a number or a variable. *)
   and compile_for (id : J.for_ident) (start : Lam.t) (finish : Lam.t)
       (direction : Js_op.direction_flag) (body : Lam.t)
       (lambda_cxt : Lam_compile_context.t) =
@@ -1189,38 +1202,36 @@ let compile output_prefix =
       match (compile_lambda new_cxt start, compile_lambda new_cxt finish) with
       | {value = None}, _ | _, {value = None} -> assert false
       | {block = b1; value = Some e1}, {block = b2; value = Some e2} -> (
-        (* order b1 -- (e1 -- b2 -- e2)
-            in most cases we can shift it into such scenarios
-            b1, b2, [e1, e2]
-           - b2 is Empty
-           - e1 is pure
-             we can guarantee e1 is pure, if it literally contains a side effect call,
-             put it in the beginning
-        *)
+        (* The evaluation order is b1, e1, b2, e2. The loop header evaluates e1
+           and then e2, so e1 goes there if b2 is empty or cannot affect its
+           value, and into a temporary before b2 otherwise. *)
         let block_body =
           Js_output.output_as_block
             (compile_lambda
                {lambda_cxt with continuation = EffectCall Not_tail}
                body)
         in
-        match (b1, b2) with
-        | _, [] ->
+        match b2 with
+        | [] ->
           Ext_list.append_one b1 (S.for_ (Some e1) e2 id direction block_body)
-        | _, _
-          when Js_analyzer.no_side_effect_expression e1
-               (*
-                     e1 > b2 > e2
-                     re-order
-                     b2 > e1 > e2
-                   *)
-          ->
+        | _ when not (may_change ~during:finish e1) ->
           Ext_list.append b1
             (Ext_list.append_one b2
                (S.for_ (Some e1) e2 id direction block_body))
-        | _, _ ->
+        | _ ->
+          (* e1 must be evaluated before b2. Hold it in a temporary rather than
+             declaring [id] before the loop: that would make [id] one variable
+             shared by every iteration, so closures in the body would all see
+             its final value. *)
+          let start =
+            Ext_ident.create_tmp
+              ~name:(Ext_ident.derived_name id ~suffix:"_start")
+              ()
+          in
           Ext_list.append b1
-            (S.define_variable ~kind:Variable id e1
-            :: Ext_list.append_one b2 (S.for_ None e2 id direction block_body)))
+            (S.define_variable ~kind:Strict start e1
+            :: Ext_list.append_one b2
+                 (S.for_ (Some (E.var start)) e2 id direction block_body)))
     in
     Js_output.output_of_block_and_expression lambda_cxt.continuation block
       E.unit

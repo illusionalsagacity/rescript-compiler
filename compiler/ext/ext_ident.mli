@@ -47,6 +47,10 @@ val is_uppercase_exotic : string -> bool
 
 val unwrap_uppercase_exotic : string -> string
 
+val derived_name : Ident.t -> suffix:string -> string
+(** The name of [id], without the quotes of an uppercase exotic name, followed
+    by [suffix]. Names a variable after another one. *)
+
 val convert : string -> string
 (**
    Invariant: if name is not converted, the reference should be equal

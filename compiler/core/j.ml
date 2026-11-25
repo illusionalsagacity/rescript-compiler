@@ -167,11 +167,14 @@ and expression_desc =
   | Spread of expression
 
 and for_ident_expression = expression
-(* pure*)
+(* The start of a [ForRange]. The loop header evaluates it once, before the
+   end. It may have side effects. *)
 
 and finish_ident_expression = expression
+(* The end of a [ForRange]. It may have side effects. The loop header evaluates
+   it once and binds its value, unless it is a number or a variable, which the
+   loop test reads directly. *)
 
-(* pure *)
 (* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/block
    block can be nested, specified in ES3
 *)
@@ -191,20 +194,9 @@ and finish_ident_expression = expression
       for(var finish = 32; i < finish; ++i){
         }
     ]}
-    when [for_ident_expression] is [None], [var i] has to
-    be initialized outside, so
-
-    {[
-      var i = f ()
-        (function (xxx){
-             for(var finish = 32; i < finish; ++i)
-           }(..i))
-    ]}
-    This happens rare it's okay
-
-    this is because [i] has to be initialized outside, if [j]
-    contains a block side effect
-    TODO: create such example
+    when [for_ident_expression] is [None], [i] has to be initialized outside.
+    All iterations then share it, so a closure in the body sees its final value.
+    The compiler always gives a start, so that each iteration has its own [i].
 *)
 
 (* Since in OCaml,
